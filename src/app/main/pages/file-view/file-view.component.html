@@ -1,0 +1,194 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <!-- content-header component -->
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+    <!-- Kitchen Sink Datatables -->
+    <section id="ngx-datatable-kitchen-sink">
+      <core-card-snippet [snippetCode]="_snippetCodeKitchenSink">
+        <h4 class="card-title">Manage Files</h4>
+        <div class="row">
+          <div class="col-12 mb-50">
+            <button class="btn btn-primary ml-1" rippleEffect>
+              <i data-feather="plus" class="mr-0 mr-sm-1"></i
+              ><span class="d-none d-sm-inline-block">Upload</span>
+            </button>
+
+           
+          </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 col-12 d-flex justify-content-md-start">
+              <div class="d-flex align-items-center justify-content-start m-1 w-100">
+                <label class="d-flex align-items-center w-100"
+                  >Search<input
+                    type="search"
+                    placeholder="Search"
+                    class="form-control ml-25"
+                    (keyup)="filterUpdate($event)"
+                    (search)="filterUpdate($event)"
+                    /></label>
+              </div>
+            </div>
+            <div class="col-md-4 col-12">
+              <div class="d-flex justify-content-end align-items-center m-1">
+                <label class="d-flex align-items-center"
+                  >Show
+                  <select class="form-control mx-25" [(ngModel)]="basicSelectedOption">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                  </select>
+                  entries</label
+                >
+              </div>
+            </div>
+
+        </div>
+ <!-- Row Details  Datatables -->
+ <section id="ngx-datatable-row-details">
+  <core-card-snippet [snippetCode]="_snippetCodeRowDetails">
+    <!-- ngx-datatable-row-details -->
+    <ngx-datatable
+      #tableRowDetails
+      class="bootstrap core-bootstrap"
+      [columnMode]="ColumnMode.force"
+      [headerHeight]="40"
+      [footerHeight]="50"
+      [rowHeight]="58"
+      [limit]="10"
+      [rows]="rows"
+      [scrollbarH]="true"
+    >
+      <!-- Row Detail Template -->
+      <ngx-datatable-row-detail [rowHeight]="50">
+        <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+          <div class="ml-75 pl-5 pt-75">
+            <div>
+              <!-- <span><strong>City : </strong> {{ row.city }}</span
+              ><span class="ml-1"><strong>Experience : </strong> {{ row.experience }}</span
+              ><span class="ml-1"><strong>Start Date : </strong> {{ row.start_date }}</span> -->
+              <div class="d-flex flex-row flex-wrap" >
+                <ng-container *ngFor="let content of row | keyvalue">
+                  <span class="pr-2" *ngIf="defaultKeys.indexOf(content.key) == -1">
+                    {{content.key + ': ' + content.value}}
+                  </span>  
+                </ng-container>
+              </div>
+              <ng-container *ngFor="let content of row | keyvalue">
+                <div  class="d-flex flex-row tags" *ngIf="content.key == 'tags'">
+                   <ng-container *ngFor="let val of content.value | keyvalue">
+                    <div class="pr-1"> {{val.value}} </div>
+                    </ng-container>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </ng-template>
+      </ngx-datatable-row-detail>
+      <ngx-datatable-column
+        [width]="50"
+        [resizeable]="false"
+        [sortable]="false"
+        [draggable]="false"
+        [canAutoResize]="false"
+      >
+        <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+          <a
+            href="javascript:void(0)"
+            class="text-body"
+            [class.datatable-icon-right]="!expanded"
+            [class.datatable-icon-down]="expanded"
+            title="Expand/Collapse Row"
+            (click)="rowDetailsToggleExpand(row)"
+          >
+          </a>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Title" prop="docTitle" [width]="280">
+        <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
+          <div class="d-flex align-items-center">
+
+            <div class="cell-line-height">
+              <p class="font-medium-1 line-height-1 mb-0">{{ name }}</p>
+              <span class="text-muted font-small-2"> {{ row.post }}</span>
+            </div>
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Source" prop="docSource" [width]="250"></ngx-datatable-column>
+      <ngx-datatable-column name="Class" prop="docClass" [width]="50"></ngx-datatable-column>
+      <ngx-datatable-column name="Type" prop="docType" [width]="120"></ngx-datatable-column>
+      <ngx-datatable-column name="State" prop="docState" [width]="120">
+        <ng-template let-status="value" ngx-datatable-cell-template>
+          <div
+            class="badge badge-pill"
+            [ngClass]="{
+              'badge-light-primary': status == '1',
+              'badge-light-success': status == '2',
+              'badge-light-danger': status == '3',
+              'badge-light-warning': status == '4',
+              'badge-light-info': status == '5'
+            }"
+          >
+            {{
+              status == 1
+                ? 'Active'
+                : status == 2
+                ? 'Archived'
+                : status == 3
+                ? 'Inactive'
+                : status == 4
+                ? 'Private'
+                : 'Active'
+            }}
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Actions" [width]="120" [sortable]="false">
+        <ng-template ngx-datatable-cell-template>
+          <div class="d-flex align-items-center">
+            <div ngbDropdown container="body">
+              <a
+                ngbDropdownToggle
+                href="javascript:void(0);"
+                class="hide-arrow"
+                id="dropdownBrowserState"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <i data-feather="more-vertical" class="text-primary cursor-pointer mr-50"></i>
+              </a>
+              <div ngbDropdownMenu class="dropdown-menu-right" aria-labelledby="dropdownBrowserState">
+                <a href="javascript:void(0)" ngbDropdownItem class="d-flex align-items-center"
+                  ><i data-feather="file-text" class="mr-50"></i> View</a
+                >
+                <a href="javascript:void(0)" ngbDropdownItem class="d-flex align-items-center"
+                  ><i data-feather="download" class="mr-50"></i> Download</a
+                >
+                <a href="javascript:void(0)" ngbDropdownItem class="d-flex align-items-center"
+                  ><i data-feather="trash-2" class="mr-50"></i> Delete</a
+                >
+                <a href="javascript:void(0)" ngbDropdownItem class="d-flex align-items-center"
+                ><i data-feather="lock" class="mr-50"></i> Make Private</a
+              >
+              </div>
+            </div>
+
+            <i data-feather="edit" class="text-primary cursor-pointer"></i>
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+    <!-- ngx-datatable-row-details -->
+  </core-card-snippet>
+</section>
+<!-- Row Details  Datatables -->
+      </core-card-snippet>
+    </section>
+    <!--/ Kitchen Sink Datatables -->
+
+ </div>
+</div>

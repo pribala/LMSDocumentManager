@@ -1,3 +1,4 @@
+import { SelectModule } from './../forms/form-elements/select/select.module';
 
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -21,6 +22,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { SettingsModule } from './settings/settings.module';
 import { FileViewModule } from './file-view/file-view.module';
 import { FileSearchService } from './services/file-search.service';
+import { FileSettingService } from './services/file-setting.service';
 
 const appRoutes: Routes = [
 
@@ -66,10 +68,12 @@ const appRoutes: Routes = [
     AccountSettingsModule,
     DashboardModule,
     FileViewModule,
-    SettingsModule,
-
+    SettingsModule
   ],
 
-  providers: [ FileSearchService]
+  providers: [ 
+    FileSearchService,
+    FileSettingService
+  ]
 })
 export class PagesModule {}

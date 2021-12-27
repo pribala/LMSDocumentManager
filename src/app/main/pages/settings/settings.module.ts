@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { CardSnippetModule } from '@core/components/card-snippet/card-snippet.module';
 //import { FormRepeaterComponent } from 'app/main/forms/form-repeater/form-repeater.component';
 import { DropdownsModule } from 'app/main/components/dropdowns/dropdowns.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 const routes = [
   {
     path: 'settings',
@@ -25,7 +26,7 @@ const routes = [
 
 @NgModule({
   declarations: [SettingsComponent],
-  imports: [CommonModule, RouterModule.forChild(routes), CardSnippetModule, FormsModule, CoreCommonModule, ContentHeaderModule, DropdownsModule],
+  imports: [CommonModule, RouterModule.forChild(routes), CardSnippetModule, FormsModule, CoreCommonModule, ContentHeaderModule, DropdownsModule, NgSelectModule],
   exports: [SettingsComponent]
 })
 export class SettingsModule {}

@@ -1,7 +1,10 @@
+import { FileSettingService } from './../services/file-setting.service';
 import { Component, OnInit } from '@angular/core'
 //import { repeaterAnimation } from 'app/main/forms/form-repeater/form-repeater.animation';
 
 import * as snippet from 'app/main/forms/form-repeater/form-repeater.snippetcode';
+import { forkJoin, Observable } from 'rxjs';
+import { DataService } from 'app/main/forms/form-elements/select/data.service';
 @Component({
   selector: 'app-settings-view',
   templateUrl: './settings.component.html',
@@ -22,10 +25,23 @@ export class SettingsComponent implements OnInit {
     ] 
   };
 
+  public docSource = [];
+  public docState = [];
+
+  // dropdown for Document Source
+  public docSourceTag: any[] = [];
+  public DocSourceSelectTag;
+
+  // dropdown for Document State
+  public docStateTag: any[] = [];
+  public DocStateSelectTag = [];
+
+  showOtherElements: boolean = false;
+
   // snippet code variable
   public _snippetCodeInvoiceRepeater = snippet.snippetCodeInvoiceRepeater;
 
-  constructor() {}
+  constructor(private fileSettingService: FileSettingService, private dataService: DataService) {}
 
   // Public Methods
   // -----------------------------------------------------------------------------------------------------
@@ -120,9 +136,46 @@ export class SettingsComponent implements OnInit {
         ]
       }
     };
+    this.loadData();
   }
 
   saveTemplate() {
     console.log(this.items);
+  }
+
+  loadData() {
+    // load all docSources and docStates
+    forkJoin(
+      {
+        requestDocSource: this.fileSettingService.getDocSource(), 
+        requestDocState: this.fileSettingService.getDocState()
+      }
+    ).subscribe(({requestDocSource, requestDocState}) => {
+      this.docSource = requestDocSource;
+      this.docSource.forEach((s, i) => {
+        this.docSourceTag.push({ id: i, name: s.name });
+      });      
+      this.docState = requestDocState;
+      this.docState.forEach((s, i) => {
+        this.docStateTag.push({ id: i, name: s });
+      });   
+    });
+  }
+
+  docSourceSelected(event: any){
+    // check if docSource exists
+    this.fileSettingService.getExistingData().subscribe(data => {
+      this.DocStateSelectTag = [];
+      var selectedDocSource = data.find(x => x.docSource.name === event.name);
+      if (selectedDocSource) {
+        // if source exists already prefill existing content
+        selectedDocSource.docState.forEach((s, i) => {
+          this.DocStateSelectTag.push({name: s});          
+        });          
+        this.showOtherElements = true;
+      }
+    }, err =>  {
+      alert(err);
+    });
   }
 }

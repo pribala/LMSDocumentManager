@@ -25,9 +25,9 @@
                     type="search"
                     placeholder="Search"
                     class="form-control ml-25"
-                    (keyup)="filterUpdate($event)"
-                    (search)="filterUpdate($event)"
+                    [(ngModel)]="searchText"
                     /></label>
+                <button class="btn btn-primary ml-1" (click)="search()">Search</button>
               </div>
             </div>
             <div class="col-md-4 col-12">
@@ -62,24 +62,33 @@
       [scrollbarH]="true"
     >
       <!-- Row Detail Template -->
-      <ngx-datatable-row-detail [rowHeight]="50">
+      <ngx-datatable-row-detail [rowHeight]="75">
         <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
           <div class="ml-75 pl-5 pt-75">
             <div>
-              <!-- <span><strong>City : </strong> {{ row.city }}</span
-              ><span class="ml-1"><strong>Experience : </strong> {{ row.experience }}</span
-              ><span class="ml-1"><strong>Start Date : </strong> {{ row.start_date }}</span> -->
               <div class="d-flex flex-row flex-wrap" >
                 <ng-container *ngFor="let content of row | keyvalue">
-                  <span class="pr-2" *ngIf="defaultKeys.indexOf(content.key) == -1">
-                    {{content.key + ': ' + content.value}}
-                  </span>  
+                  <!-- loop through all items not part of defaultKeys -->
+                  <ng-container *ngIf="content.key !== 'metadata'">
+                    <span class="pr-2" *ngIf="defaultKeys.indexOf(content.key) == -1">
+                      <strong>{{content.key}}</strong> : {{content.value}}
+                    </span>
+                  </ng-container>
+                  <!-- loop thought metadata array -->  
+                  <ng-container *ngIf="content.key === 'metadata'">
+                    <ng-container *ngFor="let meta of content.value">
+                      <span class="pr-2" *ngIf="defaultKeys.indexOf(content.key) == -1">
+                        <strong>{{meta.name}}</strong> : {{meta.value}} 
+                      </span> 
+                    </ng-container>
+                  </ng-container>
                 </ng-container>
               </div>
+              <!-- loop though tags -->
               <ng-container *ngFor="let content of row | keyvalue">
-                <div  class="d-flex flex-row tags" *ngIf="content.key == 'tags'">
-                   <ng-container *ngFor="let val of content.value | keyvalue">
-                    <div class="pr-1"> {{val.value}} </div>
+                <div  class="d-flex flex-row tags" *ngIf="content.key === 'tags'">
+                   <ng-container *ngFor="let val of content.value">
+                    <div class="pr-1"> #{{val}} </div>
                     </ng-container>
                 </div>
               </ng-container>
@@ -106,7 +115,7 @@
           </a>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Title" prop="docTitle" [width]="280">
+      <ngx-datatable-column name="Title" prop="name" [width]="280">
         <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
           <div class="d-flex align-items-center">
 

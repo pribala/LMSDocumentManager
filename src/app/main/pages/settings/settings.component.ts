@@ -121,4 +121,8 @@ export class SettingsComponent implements OnInit {
       }
     };
   }
+
+  saveTemplate() {
+    console.log(this.items);
+  }
 }

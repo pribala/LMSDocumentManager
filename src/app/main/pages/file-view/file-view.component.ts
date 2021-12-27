@@ -1,7 +1,8 @@
+import { FileSearchService } from './../services/file-search.service';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, filter } from 'rxjs/operators';
 import { ColumnMode, DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 
 import { CoreTranslationService } from '@core/services/translation.service';
@@ -21,21 +22,8 @@ import { DatatablesService } from 'app/main/tables/datatables/datatables.service
   encapsulation: ViewEncapsulation.None
 })
 export class FileViewComponent implements OnInit {
-   data = [
-    {docTitle: 'abc', 
-    description: 'Lorem ipsum 123', 
-    docType: 'Medical', 
-    docDate: '12/08/21', 
-    docSource: 'source1',
-    docClass: 'class1',
-    docState: 1,
-    firstName: 'joe', 
-    lastName: 'smith',
-    },
-    {docTitle: 'xyz', description: 'Lorem ipsum 456', docType: 'SSN', docDate: '12/07/21', tags: ['#visa', '#employmnent'],
-  docSource: 'source2', docClass: 'class2', docState: 2}
-  ];
-  defaultKeys: string[] = ['File Name', 'description', 'tags'];
+  data = [];
+  defaultKeys: string[] = ['File Name', 'description', 'tags', 'name'];
    // Private
    private _unsubscribeAll: Subject<any>;
    private tempData = [];
@@ -55,6 +43,7 @@ export class FileViewComponent implements OnInit {
    public chkBoxSelected = [];
    public SelectionType = SelectionType;
    public exportCSVData;
+   public searchText: string;
  
    @ViewChild(DatatableComponent) table: DatatableComponent;
    @ViewChild('tableRowDetails') tableRowDetails: any;
@@ -128,6 +117,7 @@ export class FileViewComponent implements OnInit {
     * @param event
     */
    filterUpdate(event) {
+     console.log('event', event);
      const val = event.target.value.toLowerCase();
  
      // filter our data
@@ -187,7 +177,7 @@ export class FileViewComponent implements OnInit {
     * @param {DatatablesService} _datatablesService
     * @param {CoreTranslationService} _coreTranslationService
     */
-   constructor(private _datatablesService: DatatablesService, private _coreTranslationService: CoreTranslationService) {
+   constructor(private _datatablesService: DatatablesService, private _coreTranslationService: CoreTranslationService, private fileSearchService: FileSearchService) {
      this._unsubscribeAll = new Subject();
      this._coreTranslationService.translate(english, french, german, portuguese);
    }
@@ -231,5 +221,64 @@ export class FileViewComponent implements OnInit {
          ]
        }
      };
+   }
+
+   search() {
+
+    /*
+    data = [
+      {
+        docTitle: 'abc', 
+        description: 'Lorem ipsum 123', 
+        docType: 'Medical', 
+        docDate: '12/08/21', 
+        docSource: 'source1',
+        docClass: 'class1',
+        docState: 1,
+        firstName: 'joe', 
+        lastName: 'smith',
+      },
+      {
+        docTitle: 'xyz', description: 'Lorem ipsum 456', docType: 'SSN', docDate: '12/07/21', tags: ['#visa', '#employmnent'],
+        docSource: 'source2', docClass: 'class2', docState: 2
+      }
+    ];
+
+    {id: "61bf6884171e4d810d4a1df8", hashId: "bVU6su+iRe8S1vUPYvy0KKLSS5s8Vc5A02BT/NDBJrU=",…}
+addedBy: ""
+addedDate: "2021-12-19T17:14:09.094Z"
+contentType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+description: "Lightweight and portable with smooth scrolling, sculpted comfortable design, and dongle-free Bluetooth"
+hashId: "bVU6su+iRe8S1vUPYvy0KKLSS5s8Vc5A02BT/NDBJrU="
+id: "61bf6884171e4d810d4a1df8"
+lastModified: "2021-12-19T17:14:09.094Z"
+metadata: [{name: "Tags", value: "java,CsHARP,.NET"}, {name: "ssn", value: "8787878"},…]
+name: "SD Elements City Portal WUI Outstandingg.docx"
+numberOfDownloads: 0
+size: 185542
+tags: ["java", "CsHARP", ".NET"]}
+    */
+
+    this.fileSearchService.search(this.searchText).subscribe((results: []) => {
+      this._datatablesService.onDatatablessChanged.pipe(takeUntil(this._unsubscribeAll)).subscribe(response => {
+        //this.rows = response;
+        this.rows = results.map((item: any) => {
+          return {
+            name: item.name,
+            description: item.description,
+            metadata: item.metadata.filter(x => x.name !== 'Tags'),
+            size: item.size,
+            addedBy: item.addedBy,
+            addedDate: new Date(item.addedDate).toString() !== 'Invalid Date' ? new Date(item.addedDate).toLocaleDateString("en-US") : '',
+            tags: item.tags
+          }
+        });
+        this.tempData = this.rows;
+        this.kitchenSinkRows = this.rows;
+        this.exportCSVData = this.rows;
+      });
+      
+
+    });
    }
 }

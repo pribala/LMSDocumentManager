@@ -20,6 +20,7 @@ import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { SettingsModule } from './settings/settings.module';
 import { FileViewModule } from './file-view/file-view.module';
+import { FileSearchService } from './services/file-search.service';
 
 const appRoutes: Routes = [
 
@@ -69,6 +70,6 @@ const appRoutes: Routes = [
 
   ],
 
-  providers: []
+  providers: [ FileSearchService]
 })
 export class PagesModule {}

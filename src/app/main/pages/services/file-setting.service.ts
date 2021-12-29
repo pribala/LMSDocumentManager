@@ -44,18 +44,25 @@ export class FileSettingService {
         docState: [
           'Active', 'Private'
         ],
-        docClass: {
-          name: 'MyDocClass',
-          description: 'some description of DocClass',
-          doctype: {
-            name: 'Medical',
-            metatags: [
-              { 'fn':'string' },
-              { 'ln':'string' },
-              { 'dob': 'date' }
-            ]	
-          }
-        }
+        docClass: [
+          {
+            name: 'MyDocClass',
+            description: 'some description of DocClass',
+            doctype: [
+              {
+                name: 'Medical',
+                firstName: 'string',
+                lastName: 'string',
+                dob: 'date',
+                metatags: [
+                  { 'fn':'string' },
+                  { 'ln':'string' },
+                  { 'dob': 'date' }
+                ]	
+              },
+            ]
+          },
+        ]
       }  
     ]);
   }

@@ -123,35 +123,17 @@
           <core-card-snippet [snippetCode]="_snippetCodeInvoiceRepeater">
             <h4 class="card-title">Settings 2</h4>
             <div class="card-body">
-              <label>Document Source</label>
-              <div class="form-group">
-                <ng-select
-                  [items]="docSourceTag"
-                  [addTag]="true"
-                  bindLabel="name"
-                  placeholder="Select tag"
-                  [(ngModel)]="DocSourceSelectTag"
-                  name="DocSourceSelectTag"
-                  (change)="docSourceSelected($event)"
-                >
-                  <ng-template ng-label-tmp let-item="item" let-clear="clear">
-                    <span class="ng-value-label"> {{ item.name }}</span>
-                    <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
-                  </ng-template>
-                </ng-select>
-              </div>
-
-              <ng-container *ngIf="showOtherElements">
-                <label>Document State</label>
+              <form action="#" class="invoice-repeater">
+                <label>Document Source</label>
                 <div class="form-group">
                   <ng-select
-                    [items]="docStateTag"
+                    [items]="docSourceTag"
                     [addTag]="true"
                     bindLabel="name"
-                    multiple="true"
                     placeholder="Select tag"
-                    [(ngModel)]="DocStateSelectTag"
-                    name="DocStateSelectTag"
+                    [(ngModel)]="DocSourceSelectTag"
+                    name="DocSourceSelectTag"
+                    (change)="docSourceSelected($event)"
                   >
                     <ng-template ng-label-tmp let-item="item" let-clear="clear">
                       <span class="ng-value-label"> {{ item.name }}</span>
@@ -159,7 +141,27 @@
                     </ng-template>
                   </ng-select>
                 </div>
-              </ng-container>
+
+                <ng-container *ngIf="showOtherElements">
+                  <label>Document State</label>
+                  <div class="form-group">
+                    <ng-select
+                      [items]="docStateTag"
+                      [addTag]="true"
+                      bindLabel="name"
+                      multiple="true"
+                      placeholder="Select tag"
+                      [(ngModel)]="DocStateSelectTag"
+                      name="DocStateSelectTag"
+                    >
+                      <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                        <span class="ng-value-label"> {{ item.name }}</span>
+                        <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </ng-container>
+              </form>
             </div>
           </core-card-snippet>
         </div>

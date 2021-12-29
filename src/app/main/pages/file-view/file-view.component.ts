@@ -224,41 +224,6 @@ export class FileViewComponent implements OnInit {
    }
 
    search() {
-
-    /*
-    data = [
-      {
-        docTitle: 'abc', 
-        description: 'Lorem ipsum 123', 
-        docType: 'Medical', 
-        docDate: '12/08/21', 
-        docSource: 'source1',
-        docClass: 'class1',
-        docState: 1,
-        firstName: 'joe', 
-        lastName: 'smith',
-      },
-      {
-        docTitle: 'xyz', description: 'Lorem ipsum 456', docType: 'SSN', docDate: '12/07/21', tags: ['#visa', '#employmnent'],
-        docSource: 'source2', docClass: 'class2', docState: 2
-      }
-    ];
-
-    {id: "61bf6884171e4d810d4a1df8", hashId: "bVU6su+iRe8S1vUPYvy0KKLSS5s8Vc5A02BT/NDBJrU=",…}
-addedBy: ""
-addedDate: "2021-12-19T17:14:09.094Z"
-contentType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-description: "Lightweight and portable with smooth scrolling, sculpted comfortable design, and dongle-free Bluetooth"
-hashId: "bVU6su+iRe8S1vUPYvy0KKLSS5s8Vc5A02BT/NDBJrU="
-id: "61bf6884171e4d810d4a1df8"
-lastModified: "2021-12-19T17:14:09.094Z"
-metadata: [{name: "Tags", value: "java,CsHARP,.NET"}, {name: "ssn", value: "8787878"},…]
-name: "SD Elements City Portal WUI Outstandingg.docx"
-numberOfDownloads: 0
-size: 185542
-tags: ["java", "CsHARP", ".NET"]}
-    */
-
     this.fileSearchService.search(this.searchText).subscribe((results: []) => {
       this._datatablesService.onDatatablessChanged.pipe(takeUntil(this._unsubscribeAll)).subscribe(response => {
         //this.rows = response;

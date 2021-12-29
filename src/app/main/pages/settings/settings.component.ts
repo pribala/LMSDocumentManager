@@ -36,6 +36,16 @@ export class SettingsComponent implements OnInit {
   public docStateTag: any[] = [];
   public DocStateSelectTag = [];
 
+  // text for Document Class
+  selectedDocClass: string;
+
+  // text for Document Type
+  selectedDocType: string;
+
+  // metaTags from Document Type
+  selectedMetaTags: any[] = [];
+
+  // show other elements once Document Source is selected
   showOtherElements: boolean = false;
 
   // snippet code variable
@@ -162,20 +172,53 @@ export class SettingsComponent implements OnInit {
     });
   }
 
+  // once DocSource is selected get related items
   docSourceSelected(event: any){
-    // check if docSource exists
     this.fileSettingService.getExistingData().subscribe(data => {
-      this.DocStateSelectTag = [];
+      this.resetData();
       var selectedDocSource = data.find(x => x.docSource.name === event.name);
       if (selectedDocSource) {
         // if source exists already prefill existing content
         selectedDocSource.docState.forEach((s, i) => {
           this.DocStateSelectTag.push({name: s});          
-        });          
+        });
+
+        // document class comes as array, need just 1st
+        if (selectedDocSource.docClass &&  selectedDocSource.docClass[0])
+        {
+          this.selectedDocClass = selectedDocSource.docClass[0]?.name;
+
+          // get the 1st doctype
+          if (selectedDocSource.docClass[0].doctype)
+          {
+            // set text for Document Type
+            this.selectedDocType = selectedDocSource.docClass[0].doctype[0].name;
+            
+            // set metaTags from Document Type
+            this.selectedMetaTags = selectedDocSource.docClass[0].doctype[0].metatags;
+            console.log(this.selectedMetaTags);
+            this.selectedMetaTags.forEach(item => {
+               console.log(item);
+            });
+          }
+        }
+        this.showOtherElements = true;
+      } else {
         this.showOtherElements = true;
       }
     }, err =>  {
       alert(err);
     });
+  }
+
+  resetData() {
+    this.DocStateSelectTag = [];
+    this.selectedDocClass = '';
+    this.selectedDocType = '';
+    this.selectedMetaTags = [];
+  }
+
+  deleteMetaTag(index: number) {
+    this.selectedMetaTags.splice(index, 1);
   }
 }

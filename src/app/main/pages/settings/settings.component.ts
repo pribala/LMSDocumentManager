@@ -1,3 +1,4 @@
+import { NgForm } from '@angular/forms';
 import { FileSettingService } from './../services/file-setting.service';
 import { Component, OnInit } from '@angular/core'
 //import { repeaterAnimation } from 'app/main/forms/form-repeater/form-repeater.animation';
@@ -220,5 +221,16 @@ export class SettingsComponent implements OnInit {
 
   deleteMetaTag(index: number) {
     this.selectedMetaTags.splice(index, 1);
+  }
+
+  newMetaTag() {
+    debugger;
+    this.selectedMetaTags.push({
+      '':''
+    });
+  }
+
+  saveForm(form: NgForm) {
+    console.log(form.value);
   }
 }

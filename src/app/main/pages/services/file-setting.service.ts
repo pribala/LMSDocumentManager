@@ -14,13 +14,13 @@ export class FileSettingService {
     return of ( [
       {
         id: '1',
-        name: 'Wecare',
-        description: 'Wecare is...'
+        name: 'Application Source 1',
+        description: 'description one'
       },
       {
         id: '2',
-        name: 'HPD Connect',
-        description: 'HPD Connect is...'
+        name: 'Application Source 2',
+        description: 'description two'
       },      
     ]);
   }
@@ -32,38 +32,44 @@ export class FileSettingService {
   }
 
   getExistingData() {
-    return of ( [
+    return of ( 
       {
-        id: '123',
-        name: 'template1',
-        docSource: {
-          name: 'Wecare',
-          id: '1',
-          description: 'Wecare is...'
-        },
-        docState: [
-          'Active', 'Private'
-        ],
-        docClass: [
-          {
-            name: 'MyDocClass',
-            description: 'some description of DocClass',
-            doctype: [
-              {
-                name: 'Medical',
-                firstName: 'string',
-                lastName: 'string',
-                dob: 'date',
-                metatags: [
-                  { 'fn':'string' },
-                  { 'ln':'string' },
-                  { 'dob': 'date' }
-                ]	
-              },
-            ]
-          },
-        ]
-      }  
-    ]);
+        "template": {
+          "name": "Template Two",
+          "docSource": [{
+              "name": "Application Source 1",
+              "description": "description one"
+            },
+            {
+              "name": "Application Source 2",
+              "description": "description two"
+            }
+          ],
+          "docState": [{
+              "name": "Active",
+              "isActive": true
+            },
+            {
+              "name": "InActive",
+              "isActive": true
+            }
+          ],
+          "docClass": [{
+            "name": "Document Class A",
+            "description": "some text",
+            "doctype": [{
+                "name": "medical",
+                "firstName": "string",
+                "lastName": "string",
+                "dob": "date",
+                "metatags": {
+                  "fn": "string",
+                  "ln": "string",
+                  "dob": "date"
+                }
+              }]
+            }]
+      }}
+    );
   }
 }

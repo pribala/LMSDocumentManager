@@ -26,6 +26,8 @@ export class SettingsComponent implements OnInit {
     ] 
   };
 
+  public templateData: any;
+
   public docSource = [];
   public docState = [];
 
@@ -41,10 +43,10 @@ export class SettingsComponent implements OnInit {
   selectedDocClass: string;
 
   // text for Document Type
-  selectedDocType: string;
+  selectedDocType: any;
 
   // metaTags from Document Type
-  selectedMetaTags: any[] = [];
+  selectedMetaTags = [];
 
   // show other elements once Document Source is selected
   showOtherElements: boolean = false;
@@ -176,31 +178,27 @@ export class SettingsComponent implements OnInit {
   // once DocSource is selected get related items
   docSourceSelected(event: any){
     this.fileSettingService.getExistingData().subscribe(data => {
+      console.log(data);
       this.resetData();
-      var selectedDocSource = data.find(x => x.docSource.name === event.name);
+      var selectedDocSource = data.template.docSource.find(x => x.name === event.name);
       if (selectedDocSource) {
+        this.templateData = data;
+
         // if source exists already prefill existing content
-        selectedDocSource.docState.forEach((s, i) => {
-          this.DocStateSelectTag.push({name: s});          
+        data.template.docState.forEach((element, i) => {
+          this.DocStateSelectTag.push({name: element.name});          
         });
+        this.selectedDocClass = selectedDocSource.name;
 
-        // document class comes as array, need just 1st
-        if (selectedDocSource.docClass &&  selectedDocSource.docClass[0])
+        // get the 1st doctype
+        if (data.template.docClass[0].doctype)
         {
-          this.selectedDocClass = selectedDocSource.docClass[0]?.name;
+          // set text for Document Type
+          this.selectedDocType = data.template.docClass[0].doctype[0];
 
-          // get the 1st doctype
-          if (selectedDocSource.docClass[0].doctype)
-          {
-            // set text for Document Type
-            this.selectedDocType = selectedDocSource.docClass[0].doctype[0].name;
-            
-            // set metaTags from Document Type
-            this.selectedMetaTags = selectedDocSource.docClass[0].doctype[0].metatags;
-            console.log(this.selectedMetaTags);
-            this.selectedMetaTags.forEach(item => {
-               console.log(item);
-            });
+          // set metaTags from Document Type
+          for (let [key, value] of Object.entries(data.template.docClass[0].doctype[0].metatags)) {
+          this.selectedMetaTags.push({key, value});
           }
         }
         this.showOtherElements = true;
@@ -215,7 +213,7 @@ export class SettingsComponent implements OnInit {
   resetData() {
     this.DocStateSelectTag = [];
     this.selectedDocClass = '';
-    this.selectedDocType = '';
+    this.selectedDocType = {};
     this.selectedMetaTags = [];
   }
 
@@ -224,10 +222,7 @@ export class SettingsComponent implements OnInit {
   }
 
   newMetaTag() {
-    debugger;
-    this.selectedMetaTags.push({
-      '':''
-    });
+    this.selectedMetaTags.push({});
   }
 
   saveForm(form: NgForm) {

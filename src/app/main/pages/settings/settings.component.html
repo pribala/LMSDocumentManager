@@ -184,7 +184,7 @@
                       type="text"
                       class="form-control"
                       id="selectedDocType"
-                      [(ngModel)]="this.selectedDocType"
+                      [(ngModel)]="this.selectedDocType.name"
                       name="selectedDocType"
                       placeholder="Document Type"
                     />
@@ -199,47 +199,46 @@
                             <span>New MetaTag</span>
                           </button>                         
                         </div>
-                      </div>
-                      <ng-container *ngFor="let data of selectedMetaTags; let m = index">
-                        <ng-container *ngFor="let item of data | keyvalue">
-                          <div class="row d-flex align-items-end">
-                            <div class="col-md-4 col-12">
+                      </div>                  
+                      <div *ngFor="let item of selectedMetaTags | keyvalue; let m = index">
+                        Key1: <b>{{item.key}}</b> and Value1: <b>{{item.value | json}}</b>
+                        <div class="row d-flex align-items-end">
+                          <div class="col-md-4 col-12">
+                            <div class="form-group">
+                              <label for="title{{ m }}">MetaTag Title</label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                [(ngModel)]="item.value.key"
+                                name="title{{ m }}"
+                                id="title{{ m }}"
+                                placeholder="MetaTag title"
+                              />
+                            </div>
+                          </div>
+                          <div class="col-md-4 col-12">
+                            <div class="form-group">
+                              <label for="displayValue">MetaTag Type</label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                [(ngModel)]="item.value.value"
+                                name="type{{ m }}"
+                                id="type{{ m }}"
+                                placeholder="MetaTag value"
+                              />
+                            </div>
+                          </div>                          
+                          <div class="col-md-2 col-12">  
                               <div class="form-group">
-                                <label for="title{{ m }}">MetaTag Title</label>
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  [(ngModel)]="item.key"
-                                  name="title{{ m }}"
-                                  id="title{{ m }}"
-                                  placeholder="MetaTag title"
-                                />
+                              <button class="btn btn-outline-danger text-nowrap px-1" (click)="deleteMetaTag(m)" rippleEffect>
+                                <i data-feather="x" class="mr-25"></i>
+                                <span>Delete</span>
+                              </button>
                               </div>
                             </div>
-                            <div class="col-md-4 col-12">
-                              <div class="form-group">
-                                <label for="displayValue">MetaTag Type</label>
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  [(ngModel)]="item.value"
-                                  name="type{{ m }}"
-                                  id="type{{ m }}"
-                                  placeholder="MetaTag value"
-                                />
-                              </div>
-                            </div>                          
-                            <div class="col-md-2 col-12">  
-                                <div class="form-group">
-                                <button class="btn btn-outline-danger text-nowrap px-1" (click)="deleteMetaTag(m)" rippleEffect>
-                                  <i data-feather="x" class="mr-25"></i>
-                                  <span>Delete</span>
-                                </button>
-                                </div>
-                              </div>
-                          </div>
-                        </ng-container>                      
-                      </ng-container>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <!-- Save form -->

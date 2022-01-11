@@ -1,3 +1,4 @@
+import { filter } from 'rxjs/operators';
 import { NgForm } from '@angular/forms';
 import { FileSettingService } from './../services/file-setting.service';
 import { Component, OnInit } from '@angular/core'
@@ -30,8 +31,10 @@ export class SettingsComponent implements OnInit {
   };
 
   public templateData: any;
-  templates: any[] = [];
+  templateNames: string[] = [];
   selectedTemplateName: string;
+  templates: any;
+  selectedTemplate: any;
 
   settings: any;
 
@@ -39,15 +42,24 @@ export class SettingsComponent implements OnInit {
   public docState = [];
 
   // dropdown for Document Source
-  public docSourceTag: any[] = [];
+  public docSourceTag: string[] = [];
   public DocSourceSelectTag;
 
   // dropdown for Document State
-  public docStateTag: any[] = [];
+  public docStateTag: string[] = [];
   public DocStateSelectTag = [];
 
   // text for Document Class
   selectedDocClass: string;
+
+  docTypes: any;
+  docTypeNames: string[] = [];
+  DocTypeSelectTag: any;
+
+  selectedProperties: any;
+
+  docMetaTag: any;
+  DocMetaSelectTag = [];
 
   // text for Document Type
   selectedDocType: any;
@@ -168,6 +180,11 @@ export class SettingsComponent implements OnInit {
     this.fileSettingService.getTemplates().subscribe((data: any) => {
       console.log('templates', data);
 
+      this.templates = data.template;
+
+      this.templateNames = this.templates.map(x => x.name);
+
+      /*
       this.settings = data.map(item => item.settings);
 
       _.find(this.settings.flatMap(x => x), (item) => {
@@ -180,6 +197,7 @@ export class SettingsComponent implements OnInit {
       });
 
       console.log(this.templates);
+      */
     });
 
     // load all docSources and docStates
@@ -202,24 +220,36 @@ export class SettingsComponent implements OnInit {
 
   templateNameSelected(event) {
     console.log(event);
-    console.log(this.settings);
 
-    _.find(this.settings.flatMap(x => x), (item) => {
-      let templateName =_.find(item.value, (element) => {
-        if (element.value === event.name){
-          _.find(item.value, (ele) => {
-            if (ele.name === 'docSource') {
-              console.log(ele.value);
-            }
-          });
-        }
-      });
-    });
-    
+    this.selectedTemplate = this.templates.find(x => x.name === event);
+
+    console.log('selectedTemplate', this.selectedTemplate);
+
+    // populate document source
+    this.docSourceTag = this.selectedTemplate.docSource.filter(x => x.isActive === 'true').map(y => y.name);
+
+    console.log('docSourceTag', this.docSourceTag);
+
+    // populate document state
+    this.docStateTag = this.selectedTemplate.docState.filter(x => x.isActive === 'true').map(y => y.name);
+
+    // populate document class
+    this.selectedDocClass = this.selectedTemplate.docClass.name;
+   
+    // populate document type
+    this.docTypes = this.selectedTemplate.docClass.doctype;
+    this.docTypeNames = this.docTypes.map(x => x.name);
+
+    this.showOtherElements = true;
+   
   }
 
   // once DocSource is selected get related items
   docSourceSelected(event: any){
+
+
+
+    /*
     this.fileSettingService.getExistingData().subscribe(data => {
       console.log(data);
       this.resetData();
@@ -251,6 +281,22 @@ export class SettingsComponent implements OnInit {
     }, err =>  {
       alert(err);
     });
+    */
+  }
+
+  docTypeSelected(event: any) {
+    let selectedDocType = this.docTypes.find(x => x.name === event);
+
+    // get the Properties for the selectedDoctype
+    this.selectedProperties = selectedDocType.property;
+
+    // get the MetaTags for the selectedDoctype
+    this.docMetaTag = selectedDocType.metatags;
+
+    // prefill existing metatags
+    this.DocMetaSelectTag = this.docMetaTag.map(x => x);
+
+    console.log('docMetaTag', this.docMetaTag);
   }
 
   resetData() {
@@ -260,12 +306,12 @@ export class SettingsComponent implements OnInit {
     this.selectedMetaTags = [];
   }
 
-  deleteMetaTag(index: number) {
-    this.selectedMetaTags.splice(index, 1);
+  deleteProperty(index: number) {
+    this.selectedProperties.splice(index, 1);
   }
 
-  newMetaTag() {
-    this.selectedMetaTags.push({});
+  newProperty() {
+    this.selectedProperties.push({});
   }
 
   saveForm(form: NgForm) {

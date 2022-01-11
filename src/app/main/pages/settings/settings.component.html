@@ -128,7 +128,7 @@
                 <label>Template Name</label>
                 <div class="form-group">
                   <ng-select
-                    [items]="templates"
+                    [items]="templateNames"
                     [addTag]="true"
                     bindLabel="name"
                     placeholder="Select template"
@@ -137,7 +137,7 @@
                     (change)="templateNameSelected($event)"
                   >
                     <ng-template ng-label-tmp let-item="item" let-clear="clear">
-                      <span class="ng-value-label"> {{ item.name }}</span>
+                      <span class="ng-value-label"> {{ item }}</span>
                       <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
                     </ng-template>
                   </ng-select>
@@ -156,7 +156,7 @@
                     (change)="docSourceSelected($event)"
                   >
                     <ng-template ng-label-tmp let-item="item" let-clear="clear">
-                      <span class="ng-value-label"> {{ item.name }}</span>
+                      <span class="ng-value-label"> {{ item }}</span>
                       <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
                     </ng-template>
                   </ng-select>
@@ -176,13 +176,13 @@
                       name="DocStateSelectTag"
                     >
                       <ng-template ng-label-tmp let-item="item" let-clear="clear">
-                        <span class="ng-value-label"> {{ item.name }}</span>
+                        <span class="ng-value-label"> {{ item }}</span>
                         <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
                       </ng-template>
                     </ng-select>
                   </div>
 
-                  <div ngModelGroup="docClass">
+                  <div>
                     <!-- Document Class -->
                     <div class="form-group">
                       <label>Document Class</label>
@@ -198,60 +198,66 @@
 
 
                     <!-- Document Type -->
+                    <label>Document Type</label>
                     <div class="form-group">
-                      <label>Document Type</label>
-                      <input 
-                      type="text"
-                      class="form-control"
-                      id="selectedDocType"
-                      [(ngModel)]="this.selectedDocType.name"
-                      name="selectedDocType"
-                      placeholder="Document Type"
-                    />
+                      <ng-select
+                        [items]="docTypeNames"
+                        [addTag]="true"
+                        bindLabel="name"
+                        placeholder="Select tag"
+                        [(ngModel)]="DocTypeSelectTag"
+                        name="DocTypeSelectTag"
+                        (change)="docTypeSelected($event)"
+                      >
+                        <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                          <span class="ng-value-label"> {{ item }}</span>
+                          <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                        </ng-template>
+                      </ng-select>
                     </div>
 
-                    <!-- MetaTags from Document Class -->
+                    <!-- Property from Document Type -->
                     <div class="form-group">
                       <div class="row">
                         <div class="col-12">
-                          <button class="btn btn-icon btn-primary mr-50" type="button" (click)="newMetaTag()" rippleEffect>
+                          <button class="btn btn-icon btn-primary mr-50" type="button" (click)="newProperty()" rippleEffect>
                             <i data-feather="plus" class="mr-25"></i>
-                            <span>New MetaTag</span>
+                            <span>New Property</span>
                           </button>                         
                         </div>
                       </div>                  
-                      <div *ngFor="let item of selectedMetaTags | keyvalue; let m = index">
+                      <div *ngFor="let item of selectedProperties | keyvalue; let m = index">
                         Key1: <b>{{item.key}}</b> and Value1: <b>{{item.value | json}}</b>
                         <div class="row d-flex align-items-end">
                           <div class="col-md-4 col-12">
                             <div class="form-group">
-                              <label for="title{{ m }}">MetaTag Title</label>
+                              <label for="title{{ m }}">Title</label>
                               <input
                                 type="text"
                                 class="form-control"
-                                [(ngModel)]="item.value.key"
+                                [(ngModel)]="item.value.name"
                                 name="title{{ m }}"
                                 id="title{{ m }}"
-                                placeholder="MetaTag title"
+                                placeholder="title"
                               />
                             </div>
                           </div>
                           <div class="col-md-4 col-12">
                             <div class="form-group">
-                              <label for="displayValue">MetaTag Type</label>
+                              <label for="displayValue">Type</label>
                               <input
                                 type="text"
                                 class="form-control"
                                 [(ngModel)]="item.value.value"
                                 name="type{{ m }}"
                                 id="type{{ m }}"
-                                placeholder="MetaTag value"
+                                placeholder="value"
                               />
                             </div>
                           </div>                          
                           <div class="col-md-2 col-12">  
                               <div class="form-group">
-                              <button class="btn btn-outline-danger text-nowrap px-1" (click)="deleteMetaTag(m)" rippleEffect>
+                              <button class="btn btn-outline-danger text-nowrap px-1" (click)="deleteProperty(m)" rippleEffect>
                                 <i data-feather="x" class="mr-25"></i>
                                 <span>Delete</span>
                               </button>
@@ -260,6 +266,26 @@
                         </div>
                       </div>
                     </div>
+
+                  <!-- Documment MetaTags -->
+                  <label>Document State</label>
+                  <div class="form-group">
+                    <ng-select
+                      [items]="docMetaTag"
+                      [addTag]="true"
+                      bindLabel="name"
+                      multiple="true"
+                      placeholder="Select tag"
+                      [(ngModel)]="DocMetaSelectTag"
+                      name="DocMetaSelectTag"
+                    >
+                      <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                        <span class="ng-value-label"> {{ item }}</span>
+                        <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+
                   </div>
                   <!-- Save form -->
                   <div class="row">

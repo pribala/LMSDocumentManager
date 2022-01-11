@@ -6,6 +6,9 @@ import { Component, OnInit } from '@angular/core'
 import * as snippet from 'app/main/forms/form-repeater/form-repeater.snippetcode';
 import { forkJoin, Observable } from 'rxjs';
 import { DataService } from 'app/main/forms/form-elements/select/data.service';
+
+import * as _ from 'underscore';
+
 @Component({
   selector: 'app-settings-view',
   templateUrl: './settings.component.html',
@@ -27,6 +30,10 @@ export class SettingsComponent implements OnInit {
   };
 
   public templateData: any;
+  templates: any[] = [];
+  selectedTemplateName: string;
+
+  settings: any;
 
   public docSource = [];
   public docState = [];
@@ -156,23 +163,59 @@ export class SettingsComponent implements OnInit {
     console.log(this.items);
   }
 
-  loadData() {
-    // load all docSources and docStates
-    forkJoin(
-      {
-        requestDocSource: this.fileSettingService.getDocSource(), 
-        requestDocState: this.fileSettingService.getDocState()
-      }
-    ).subscribe(({requestDocSource, requestDocState}) => {
-      this.docSource = requestDocSource;
-      this.docSource.forEach((s, i) => {
-        this.docSourceTag.push({ id: i, name: s.name });
-      });      
-      this.docState = requestDocState;
-      this.docState.forEach((s, i) => {
-        this.docStateTag.push({ id: i, name: s });
-      });   
+  loadData() {   
+    // get templates
+    this.fileSettingService.getTemplates().subscribe((data: any) => {
+      console.log('templates', data);
+
+      this.settings = data.map(item => item.settings);
+
+      _.find(this.settings.flatMap(x => x), (item) => {
+        let templateName =_.find(item.value, (element) => {
+          return element.name === 'name'
+        });
+        //this.templates.push({id: templateName.value, name: templateName.value});
+        // Ng-select component implements OnPush so have to push like below not above
+        this.templates = [...this.templates, {name: templateName.value}];
+      });
+
+      console.log(this.templates);
     });
+
+    // load all docSources and docStates
+    // forkJoin(
+    //   {
+    //     requestDocSource: this.fileSettingService.getDocSource(), 
+    //     requestDocState: this.fileSettingService.getDocState()
+    //   }
+    // ).subscribe(({requestDocSource, requestDocState}) => {
+    //   this.docSource = requestDocSource;
+    //   this.docSource.forEach((s, i) => {
+    //     this.docSourceTag.push({ id: i, name: s.name });
+    //   });      
+    //   this.docState = requestDocState;
+    //   this.docState.forEach((s, i) => {
+    //     this.docStateTag.push({ id: i, name: s });
+    //   });   
+    // });
+  }
+
+  templateNameSelected(event) {
+    console.log(event);
+    console.log(this.settings);
+
+    _.find(this.settings.flatMap(x => x), (item) => {
+      let templateName =_.find(item.value, (element) => {
+        if (element.value === event.name){
+          _.find(item.value, (ele) => {
+            if (ele.name === 'docSource') {
+              console.log(ele.value);
+            }
+          });
+        }
+      });
+    });
+    
   }
 
   // once DocSource is selected get related items

@@ -10,6 +10,10 @@ export class FileSettingService {
 
   constructor(private http: HttpClient) { }
 
+  getTemplates() {
+    return this.http.get(environment.apiUrl + "Config/GetTemplates");
+  }
+
   getDocSource() {
     return of ( [
       {

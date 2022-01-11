@@ -124,6 +124,26 @@
             <h4 class="card-title">Settings 2</h4>
             <div class="card-body">
               <form action="#" class="invoice-repeater" #docForm="ngForm" (ngSubmit)="saveForm(docForm)">
+                <!-- Template Names -->
+                <label>Template Name</label>
+                <div class="form-group">
+                  <ng-select
+                    [items]="templates"
+                    [addTag]="true"
+                    bindLabel="name"
+                    placeholder="Select template"
+                    [(ngModel)]="selectedTemplateName"
+                    name="selectedTemplateName"
+                    (change)="templateNameSelected($event)"
+                  >
+                    <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                      <span class="ng-value-label"> {{ item.name }}</span>
+                      <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                    </ng-template>
+                  </ng-select>
+                </div>                
+
+
                 <label>Document Source</label>
                 <div class="form-group">
                   <ng-select

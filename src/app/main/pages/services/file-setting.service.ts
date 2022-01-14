@@ -38,7 +38,7 @@ export class FileSettingService {
               },
               {
                 "name": "private",
-                "isActive": "false"
+                "isActive": "true"
               },
               {
                 "name": "shared",
@@ -155,6 +155,11 @@ export class FileSettingService {
 
 
 
+  }
+
+  saveTemplate(model) {
+    console.log('saving', model);
+    return this.http.post(environment.apiUrl + 'Config/SaveTemplate', model);
   }
 
   getDocSource() {

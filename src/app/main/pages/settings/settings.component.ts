@@ -168,80 +168,42 @@ export class SettingsComponent implements OnInit {
         ]
       }
     };
-    this.loadData();
+    this.loadData(null);
   }
 
   saveTemplate() {
     console.log(this.items);
   }
 
-  loadData() {   
+  loadData(selectedTemplate: string) {   
     // get templates
     this.fileSettingService.getTemplates().subscribe((data: any) => {
-      console.log('templates', data);
-
       this.templates = data.template;
-
       this.templateNames = this.templates.map(x => x.name);
 
-      /*
-      this.settings = data.map(item => item.settings);
+      if (selectedTemplate) {
+        this.selectedTemplate = this.templates.find(x => x.name === selectedTemplate);
 
-      _.find(this.settings.flatMap(x => x), (item) => {
-        let templateName =_.find(item.value, (element) => {
-          return element.name === 'name'
-        });
-        //this.templates.push({id: templateName.value, name: templateName.value});
-        // Ng-select component implements OnPush so have to push like below not above
-        this.templates = [...this.templates, {name: templateName.value}];
-      });
-
-      console.log(this.templates);
-      */
+        // populate document source
+        this.docSourceTag = this.selectedTemplate.docSource.filter(x => x.isActive === 'true').map(y => y.name);
+    
+        // populate document state
+        this.docStateTag = this.selectedTemplate.docState.filter(x => x.isActive === 'true').map(y => y.name); 
+    
+        // populate document class
+        this.selectedDocClass = this.selectedTemplate.docClass.name;
+       
+        // populate document type
+        this.docTypes = this.selectedTemplate.docClass.doctype;
+        this.docTypeNames = this.docTypes.map(x => x.name);
+    
+        this.showOtherElements = true;
+      }
     });
-
-    // load all docSources and docStates
-    // forkJoin(
-    //   {
-    //     requestDocSource: this.fileSettingService.getDocSource(), 
-    //     requestDocState: this.fileSettingService.getDocState()
-    //   }
-    // ).subscribe(({requestDocSource, requestDocState}) => {
-    //   this.docSource = requestDocSource;
-    //   this.docSource.forEach((s, i) => {
-    //     this.docSourceTag.push({ id: i, name: s.name });
-    //   });      
-    //   this.docState = requestDocState;
-    //   this.docState.forEach((s, i) => {
-    //     this.docStateTag.push({ id: i, name: s });
-    //   });   
-    // });
   }
 
   templateNameSelected(event) {
-    console.log(event);
-
-    this.selectedTemplate = this.templates.find(x => x.name === event);
-
-    console.log('selectedTemplate', this.selectedTemplate);
-
-    // populate document source
-    this.docSourceTag = this.selectedTemplate.docSource.filter(x => x.isActive === 'true').map(y => y.name);
-
-    console.log('docSourceTag', this.docSourceTag);
-
-    // populate document state
-    this.docStateTag = this.selectedTemplate.docState.filter(x => x.isActive === 'true').map(y => y.name);
-
-    // populate document class
-    this.selectedDocClass = this.selectedTemplate.docClass.name;
-   
-    // populate document type
-    this.docTypes = this.selectedTemplate.docClass.doctype;
-    this.docTypeNames = this.docTypes.map(x => x.name);
-
-    this.showOtherElements = true;
-   
+    this.loadData(event);  
   }
 
   // once DocSource is selected get related items
@@ -295,8 +257,6 @@ export class SettingsComponent implements OnInit {
 
     // prefill existing metatags
     this.DocMetaSelectTag = this.docMetaTag.map(x => x);
-
-    console.log('docMetaTag', this.docMetaTag);
   }
 
   resetData() {
@@ -315,6 +275,27 @@ export class SettingsComponent implements OnInit {
   }
 
   saveForm(form: NgForm) {
-    console.log(form.value);
+    const templateModel = Object.assign({}, this.selectedTemplate); 
+    console.log('before org', this.selectedTemplate);
+    console.log('before model', templateModel);
+
+    // Doc State
+    templateModel.docState.forEach(state => {
+      if (this.DocStateSelectTag.find(x => x === state.name)) {
+        state.isActive = "true";
+      }
+      else {
+        state.isActive = "false";
+      }
+    });
+    
+    console.log('after org', this.selectedTemplate);
+    console.log('after model', templateModel);
+
+    this.fileSettingService.saveTemplate(this.selectedTemplate).subscribe(data => {
+      console.log(data);
+    })
+
+    form.reset();
   }
 }

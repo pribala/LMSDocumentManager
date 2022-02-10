@@ -35,6 +35,7 @@ export class SettingsComponent implements OnInit {
   selectedTemplateName: string;
   templates: any;
   selectedTemplate: any;
+  selectedTemplateId: any;
 
   settings: any;
 
@@ -178,18 +179,25 @@ export class SettingsComponent implements OnInit {
   loadData(selectedTemplate: string) {   
     // get templates
     this.fileSettingService.getTemplates().subscribe((data: any) => {
-      this.templates = data.template;
-      this.templateNames = this.templates.map(x => x.name);
+      this.templates = data;
+      this.templateNames = this.templates.map(x => x.Settings.name);
 
       if (selectedTemplate) {
-        this.selectedTemplate = this.templates.find(x => x.name === selectedTemplate);
+        this.selectedTemplate = this.templates.find(x => x.Settings.name === selectedTemplate).Settings;
+
+        this.selectedTemplateId = this.templates.find(x => x.Settings.name === selectedTemplate)._id;
 
         // populate document source
-        this.docSourceTag = this.selectedTemplate.docSource.filter(x => x.isActive === 'true').map(y => y.name);
+        this.docSourceTag = this.selectedTemplate.docSource.map(y => y.name);
     
         // populate document state
-        this.docStateTag = this.selectedTemplate.docState.filter(x => x.isActive === 'true').map(y => y.name); 
+        this.docStateTag = this.selectedTemplate.docState.map(y => y.name); 
     
+        // if source exists already prefill existing content
+        this.DocStateSelectTag = this.selectedTemplate.docState.filter(x => x.isActive === 'true');
+
+        this.DocSourceSelectTag = this.selectedTemplate.docSource.filter(x => x.isActive === 'true').map(x => x.name);
+
         // populate document class
         this.selectedDocClass = this.selectedTemplate.docClass.name;
        
@@ -289,10 +297,15 @@ export class SettingsComponent implements OnInit {
       }
     });
     
-    console.log('after org', this.selectedTemplate);
-    console.log('after model', templateModel);
+    const model = {
+      _id : this.selectedTemplateId,
+      Settings: this.selectedTemplate
+    };
 
-    this.fileSettingService.saveTemplate(this.selectedTemplate).subscribe(data => {
+    console.log('after org', this.selectedTemplate);
+    console.log('after model', model);
+
+    this.fileSettingService.saveTemplate(model).subscribe(data => {
       console.log(data);
     })
 

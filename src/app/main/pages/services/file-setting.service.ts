@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +12,9 @@ export class FileSettingService {
   constructor(private http: HttpClient) { }
 
   getTemplates() {
-    //return this.http.get(environment.apiUrl + "Config/GetTemplates");
+    return this.http.get(environment.apiUrl + "Config/GetTemplates");//.pipe(map(res => res.json()));
 
+    /*
     return of (
       {
         "template": [{
@@ -151,7 +153,7 @@ export class FileSettingService {
         ]
       }
     );
-
+    */
 
 
 

@@ -22,6 +22,7 @@ import { DatatablesService } from 'app/main/tables/datatables/datatables.service
   encapsulation: ViewEncapsulation.None
 })
 export class FileViewComponent implements OnInit {
+
   data = [];
   defaultKeys: string[] = ['File Name', 'description', 'tags', 'name'];
    // Private
@@ -177,7 +178,9 @@ export class FileViewComponent implements OnInit {
     * @param {DatatablesService} _datatablesService
     * @param {CoreTranslationService} _coreTranslationService
     */
-   constructor(private _datatablesService: DatatablesService, private _coreTranslationService: CoreTranslationService, private fileSearchService: FileSearchService) {
+   constructor(private _datatablesService: DatatablesService
+      , private _coreTranslationService: CoreTranslationService
+      , private fileSearchService: FileSearchService) {
      this._unsubscribeAll = new Subject();
      this._coreTranslationService.translate(english, french, german, portuguese);
    }

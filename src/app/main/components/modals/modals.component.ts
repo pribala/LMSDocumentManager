@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -24,6 +24,10 @@ export class ModalsComponent implements OnInit {
    *
    * @param {NgbModal} modalService
    */
+
+
+  
+
   constructor(private modalService: NgbModal) {}
 
   // Public Methods

@@ -1,3 +1,6 @@
+import { SharedModule } from './../../shared/shared.module';
+import { ModalsComponent } from 'app/main/components/modals/modals.component';
+import { ModalsModule } from 'app/main/components/modals/modals.module';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -13,6 +16,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { CardSnippetModule } from '@core/components/card-snippet/card-snippet.module';
 
 import { DatatablesService } from 'app/main/tables/datatables/datatables.service';
+import { FormsModule } from '@angular/forms';
 
 const routes = [
   {
@@ -32,7 +36,9 @@ const routes = [
     NgbModule,
     CardSnippetModule,
     NgxDatatableModule,
-    CsvModule],
+    CsvModule,
+    SharedModule,
+    FormsModule],
   exports: [FileViewComponent],
   providers: [DatatablesService]
 })

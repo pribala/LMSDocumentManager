@@ -19,6 +19,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [ModalsComponent],
-  imports: [RouterModule.forChild(routes), NgbModule, ContentHeaderModule, CardSnippetModule, CoreCommonModule]
+  imports: [RouterModule.forChild(routes), NgbModule, ContentHeaderModule, CardSnippetModule, CoreCommonModule],
+  exports:[]
 })
 export class ModalsModule {}

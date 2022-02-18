@@ -15,4 +15,8 @@ export class FileSearchService {
     };
     return this.http.post(environment.apiUrl + "Storage/search", model);
   }
+
+  uploadFile(model: any){
+    return this.http.post(environment.apiUrl + "Storage/upload", model);
+  }
 }

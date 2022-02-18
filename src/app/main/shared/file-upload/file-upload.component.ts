@@ -1,14 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { environment } from './../../../../environments/environment.prod';
+import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
 
 
-const URL = 'https://evening-anchorage-3159.herokuapp.com/api/';
+const URL = environment.apiUrl + 'Storage/upload';
 @Component({
   selector: 'app-file-upload',
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.scss']
 })
 export class FileUploadComponent implements OnInit {
+
+  @Input() fileInput;
 
   uploader:FileUploader;
   hasBaseDropZoneOver:boolean;
@@ -21,6 +24,7 @@ export class FileUploadComponent implements OnInit {
       disableMultipart: true, // 'DisableMultipart' must be 'true' for formatDataFunction to be called.
       formatDataFunctionIsAsync: true,
       formatDataFunction: async (item) => {
+        console.log('formatDataFunction');
         return new Promise( (resolve, reject) => {
           resolve({
             name: item._file.name,
@@ -37,11 +41,17 @@ export class FileUploadComponent implements OnInit {
 
     this.response = '';
 
-    this.uploader.response.subscribe( res => this.response = res );
+    this.uploader.response.subscribe( res => {
+      this.response = res 
+      console.log('res', res);
+    });
   }
 
   ngOnInit(): void {
-      
+    this.uploader.onBuildItemForm = (fileItem: any, form: any) => {
+      console.log('onBuildItemForm event');
+      form.append('someField', 'test'); //note comma separating key and value
+     };      
   }
 
   public fileOverBase(e:any):void {
@@ -50,6 +60,14 @@ export class FileUploadComponent implements OnInit {
 
   public fileOverAnother(e:any):void {
     this.hasAnotherDropZoneOver = e;
+  }
+
+  public onFileSelected(event: EventEmitter<File[]>) {
+    const file: File = event[0];
+
+    console.log('onFileSelected', file);
+
+
   }
 
 }

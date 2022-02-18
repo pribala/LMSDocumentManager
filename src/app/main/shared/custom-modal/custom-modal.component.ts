@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FileSearchService } from 'app/main/pages/services/file-search.service';
 import { FileSettingService } from 'app/main/pages/services/file-setting.service';
 
 @Component({
@@ -25,7 +26,9 @@ export class CustomModalComponent implements OnInit {
   selectedProperties: any;
   selectedMetaTags: any;
 
-  constructor(private modalService: NgbModal, private fileSettingService: FileSettingService) { }
+  fileArray: File[];
+
+  constructor(private modalService: NgbModal, private fileSettingService: FileSettingService, private fileSearchService: FileSearchService) { }
 
   ngOnInit(): void {
     this.loadData(null);
@@ -94,6 +97,22 @@ export class CustomModalComponent implements OnInit {
 
     // // prefill existing metatags
     // this.DocMetaSelectTag = this.docMetaTag.map(x => x);
+  }
+
+  uploadFile() {
+    // setup the modal to send to API
+    let formData = new FormData();
+    this.fileArray.forEach(file => {
+      formData.append('File', file);
+    });
+
+    this.fileSearchService.uploadFile(formData).subscribe((data) => {
+      console.log('called api to upload', data);
+    }, err => {
+      console.log('error while upload', err);
+    });    
+
+    this.modalService.dismissAll();
   }
 
 }

@@ -102,7 +102,7 @@
                 </div>
 
                 <div class="form-group">
-                  <app-file-upload></app-file-upload>
+                  <app-file-upload [fileInput]="fileDetails"></app-file-upload>
                 </div>
                 
             </ng-container>
@@ -112,7 +112,7 @@
 
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-primary" (click)="modal.close('Accept click')" rippleEffect>
+      <button type="button" class="btn btn-primary" (click)="uploadFile()" rippleEffect>
         Save
       </button>
     </div>

@@ -52,17 +52,19 @@
                     </ng-template>
                     </ng-select>
                 </div>
-
+                
                 <!-- Document State -->
                 <label>Document State</label>
-                <div *ngFor="let state of availableDocState;">
+                <br/>
+                <div *ngFor="let state of availableDocState;" class="form-check form-check-inline">
                     <input
+                    class="form-check-input"
                     type="radio"
                     name="inlineRadioOptions"
                     id="inlineRadio1"
                     value="state.name"
                     />
-                    <label for="inlineRadio1">{{state.name}}</label>
+                    <label class="form-check-label" for="inlineRadio1">{{state.name}}</label>
                 </div>
 
                 <!-- Document Source -->
@@ -111,7 +113,7 @@
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-primary" (click)="modal.close('Accept click')" rippleEffect>
-        Accept
+        Save
       </button>
     </div>
   </ng-template>

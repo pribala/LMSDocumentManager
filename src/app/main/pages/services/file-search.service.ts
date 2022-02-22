@@ -6,7 +6,7 @@ import { environment } from 'environments/environment';
   providedIn: 'root'
 })
 export class FileSearchService {
-
+  selectedFiles: File[] = [];
   constructor(private http: HttpClient) { }
 
   search(keyword: string) {
@@ -18,5 +18,13 @@ export class FileSearchService {
 
   uploadFile(model: any){
     return this.http.post(environment.apiUrl + "Storage/upload", model);
+  }
+
+  addFileToList(file: File) {
+    this.selectedFiles.push(file);
+  }
+
+  getFiles() {
+    return this.selectedFiles.map(x => x);
   }
 }

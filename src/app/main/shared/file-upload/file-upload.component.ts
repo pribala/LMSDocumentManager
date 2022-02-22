@@ -1,7 +1,7 @@
 import { environment } from './../../../../environments/environment.prod';
 import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
-
+import { FileSearchService } from '../../pages/services/file-search.service';
 
 const URL = environment.apiUrl + 'Storage/upload';
 @Component({
@@ -18,7 +18,7 @@ export class FileUploadComponent implements OnInit {
   hasAnotherDropZoneOver:boolean;
   response:string;
 
-  constructor (){
+  constructor (private fileService: FileSearchService){
     this.uploader = new FileUploader({
       url: URL,
       disableMultipart: true, // 'DisableMultipart' must be 'true' for formatDataFunction to be called.
@@ -64,7 +64,7 @@ export class FileUploadComponent implements OnInit {
 
   public onFileSelected(event: EventEmitter<File[]>) {
     const file: File = event[0];
-
+    this.fileService.addFileToList(file);
     console.log('onFileSelected', file);
 
 

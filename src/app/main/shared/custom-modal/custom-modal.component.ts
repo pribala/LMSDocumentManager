@@ -102,10 +102,11 @@ export class CustomModalComponent implements OnInit {
   uploadFile() {
     // setup the modal to send to API
     let formData = new FormData();
+ 
+    this.fileArray = this.fileSearchService.getFiles();
     this.fileArray.forEach(file => {
       formData.append('File', file);
     });
-
     this.fileSearchService.uploadFile(formData).subscribe((data) => {
       console.log('called api to upload', data);
     }, err => {

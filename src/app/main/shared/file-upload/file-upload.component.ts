@@ -66,8 +66,6 @@ export class FileUploadComponent implements OnInit {
     const file: File = event[0];
     this.fileService.addFileToList(file);
     console.log('onFileSelected', file);
-
-
   }
 
 }

@@ -13,7 +13,7 @@
     </div>
     <div class="modal-body" tabindex="0" ngbAutofocus>
 
-        <form action="#" class="invoice-repeater" #docForm="ngForm" (ngSubmit)="saveForm(docForm)">
+        <form action="#" class="invoice-repeater" #docForm="ngForm">
             <!-- Template Names -->
             <label>Template Name</label>
             <div class="form-group">
@@ -90,6 +90,7 @@
                                     name="title{{ m }}"
                                     id="title{{ m }}"
                                     placeholder="{{item.value.name}}"
+                                    [(ngModel)]="item.value.value"
                                 />
                                 </div>
                             </div>                       
@@ -101,18 +102,33 @@
                     <label>Meta Tags: {{this.selectedMetaTags}}</label>
                 </div>
 
+                <!-- File Title -->
+                <label>Document Title</label>
+                <div class="form-group">                
+                  <input type="text" class="form-control" name="docTitle" [(ngModel)]="docTitle"/>
+                </div>
+
+                <!-- File Description -->
+                <label>Document Description</label>
+                <div class="form-group">                
+                  <input type="text" class="form-control" name="docDescription" [(ngModel)]="docDescription"/>
+                </div>
+
+                <!-- File Upload component -->
                 <div class="form-group">
                   <app-file-upload [fileInput]="fileDetails"></app-file-upload>
                 </div>
                 
             </ng-container>
             <!-- Document Tags -->
+
+            <button type="submit">Submit Form</button>
         </form>
 
 
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-primary" (click)="uploadFile()" rippleEffect>
+      <button type="button" class="btn btn-primary" (click)="uploadFile(docForm)" rippleEffect>
         Save
       </button>
     </div>

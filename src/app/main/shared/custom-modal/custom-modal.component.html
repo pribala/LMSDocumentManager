@@ -11,7 +11,7 @@
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <div class="modal-body" tabindex="0" ngbAutofocus>
+    <div class="modal-body parent" tabindex="0" ngbAutofocus>
 
         <form action="#" class="invoice-repeater" #docForm="ngForm">
             <!-- Template Names -->
@@ -34,6 +34,7 @@
             </div>   
 
             <ng-container *ngIf="selectedTemplateName">
+              <div class="child">
                 <!-- Document Type -->
                 <label>Document Type</label>
                 <div class="form-group">
@@ -78,10 +79,10 @@
                 </div>
 
                 <!-- Property from Document Type -->
-                <div class="form-group">
-                    <div *ngFor="let item of selectedProperties | keyvalue; let m = index">
-                        <div class="row d-flex align-items-end">
-                            <div class="col-md-4 col-12">
+                <!-- <div class="form-group"> -->
+                    <div class="flex-row d-flex align-items-end flex-wrap">
+                      <ng-container *ngFor="let item of selectedProperties | keyvalue; let m = index">
+                            <div class="col-md-6 col-12">
                                 <div class="form-group">
                                 <label for="title{{ m }}">{{item.value.name}}</label>
                                 <input
@@ -93,14 +94,16 @@
                                     [(ngModel)]="item.value.value"
                                 />
                                 </div>
-                            </div>                       
-                        </div>
+                            </div>  
+
+                          </ng-container>
                     </div>
-                </div>
+                <!-- </div> -->
 
                 <div class="form-group" *ngIf="selectedMetaTags">
                     <label>Meta Tags: {{this.selectedMetaTags}}</label>
                 </div>
+         
 
                 <!-- File Title -->
                 <label>Document Title</label>
@@ -118,11 +121,10 @@
                 <div class="form-group">
                   <app-file-upload [fileInput]="fileDetails"></app-file-upload>
                 </div>
-                
+              </div>  
             </ng-container>
             <!-- Document Tags -->
 
-            <button type="submit">Submit Form</button>
         </form>
 
 

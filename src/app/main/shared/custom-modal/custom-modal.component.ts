@@ -40,7 +40,8 @@ export class CustomModalComponent implements OnInit {
 
   openModal(modal){
     this.modalService.open(modal, {
-      windowClass: 'modal'
+      windowClass: 'modal',
+      size: 'lg',
     });
    }
 

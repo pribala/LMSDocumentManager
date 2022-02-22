@@ -1,12 +1,17 @@
-.my-drop-zone { border: dotted 3px lightgray; }
+.my-drop-zone { 
+    border: dotted 3px lightgray; 
+    height: 100px;
+    margin-bottom: 10px;
+}
 .nv-file-over { border: dotted 3px red; } /* Default class applied to drop zones on over */
 .another-file-over-class { border: dotted 3px green; }
 
 html, body { height: 100%; }
 
-.container {
-    display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: 5% 20% 20% 15% 20% auto;
-    grid-row-gap: 2%;
-}
+// .container {
+//     display: grid;
+//     grid-template-columns: 100%;
+//     grid-template-rows: 5% 20% 20% 15% 20% auto;
+//     grid-row-gap: 2%;
+// }
+

@@ -1,9 +1,8 @@
 
 <div class="container">
       
-    <h3>Select files</h3>
+    <h4>Select files</h4>
     <div class="row">
-
         <div class="col">
             <div ng2FileDrop
                  [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
@@ -28,20 +27,17 @@
     <div class="row">        
         <div class="col">
             Multiple
-            <input type="file" ng2FileSelect [uploader]="uploader" multiple  /><br/>
- 
+            <input type="file" ng2FileSelect [uploader]="uploader" multiple  />
+        </div>
+        <div class="col">    
             Single
             <input type="file" [uploader]="uploader" ng2FileSelect (onFileSelected)="onFileSelected($event)" />
         </div>
     </div>
+    <h5 class="mt-2">Upload queue - Queue length: {{ uploader?.queue?.length }}</h5>
     <div class="row">
- 
-        <div class="col" style="margin-bottom: 20px">
- 
-            <h3>Upload queue</h3>
-            <p>Queue length: {{ uploader?.queue?.length }}</p>
- 
-            <table class="table w-100">
+         <div class="col" style="margin-bottom: 20px">
+             <table class="table w-100">
                 <thead>
                 <tr>
                     <th>Name</th>

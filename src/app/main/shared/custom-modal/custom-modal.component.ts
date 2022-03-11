@@ -3,6 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FileSearchService } from 'app/main/pages/services/file-search.service';
 import { FileSettingService } from 'app/main/pages/services/file-setting.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-custom-modal',
@@ -19,7 +20,7 @@ export class CustomModalComponent implements OnInit {
   selectedTemplateId: any;
   docTitle: string;
   docDescription: string;
-  
+  @ViewChild('docForm') docForm: NgForm; 
   public availableDocState = [];
 
   selectedTemplateName: string;
@@ -36,6 +37,7 @@ export class CustomModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData(null);
+    
   }
 
   openModal(modal){
@@ -94,41 +96,52 @@ export class CustomModalComponent implements OnInit {
   }
 
   uploadFile(docForm) {
+    
     // setup the modal to send to API
     let formData = new FormData();
 
     let form = docForm.form;
  
     this.fileArray = this.fileSearchService.getFiles();
-    this.fileArray.forEach(file => {
-      formData.append('File', file);
-    });
-
+   
     // docClass
     formData.append('docClass', this.selectedDocClass);
 
     // Tags
-    this.selectedMetaTags.forEach(tag => {
-      formData.append('Tags', tag);
-    });
-
+    if (this.selectedMetaTags && this.selectedMetaTags.length > 0) {
+      this.selectedMetaTags.forEach(tag => {
+        formData.append('Tags', tag);
+      });
+    }
     // custom fields
-    this.selectedProperties.forEach((property, index) => {
-      formData.append(property.name, form.controls['title' + index].value);
-    });    
+    if (this.selectedProperties && this.selectedProperties.length > 0) {
+      this.selectedProperties.forEach((property, index) => {
+        formData.append(property.name, form.controls['title' + index].value);
+      });    
+    }
 
     // Title
     formData.append('Title', this.docTitle);
 
     // Description
     formData.append('Description', this.docDescription);
+    this.fileArray.forEach(file => {
+      formData.set('File', file);
+      this.fileSearchService.uploadFile(formData).subscribe((data) => {
+          this.toastr.success('File Uploaded');
+        }, err => {
+          this.toastr.error('Could not upload file');
+      });    
+   
+    });
+    
 
-    this.fileSearchService.uploadFile(formData).subscribe((data) => {
-       this.toastr.success('File Uploaded');
-     }, err => {
-       this.toastr.error('Could not upload file');
-    });    
+     docForm.form.reset();
+     this.modalService.dismissAll();
+  }
 
-    this.modalService.dismissAll();
+  close(modal) {
+    modal.dismiss('Cross click');
+
   }
 }

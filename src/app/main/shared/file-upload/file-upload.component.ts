@@ -56,6 +56,7 @@ export class FileUploadComponent implements OnInit {
 
   public fileOverBase(e:any):void {
     this.hasBaseDropZoneOver = e;
+    this.onFileSelected(e);
   }
 
   public fileOverAnother(e:any):void {
@@ -63,9 +64,12 @@ export class FileUploadComponent implements OnInit {
   }
 
   public onFileSelected(event: EventEmitter<File[]>) {
-    const file: File = event[0];
-    this.fileService.addFileToList(file);
-    console.log('onFileSelected', file);
+    const file = [...this.uploader.queue];
+    file.forEach(item => {
+      this.fileService.addFileToList(item._file);
+    });
+
+  
   }
 
 }

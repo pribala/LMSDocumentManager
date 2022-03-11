@@ -13,7 +13,7 @@
             </div>
         </div>
     </div>    
-    <div class="row">
+    <!-- <div class="row">
         <div class="col">        
             <div ng2FileDrop
                  [ngClass]="{'another-file-over-class': hasAnotherDropZoneOver}"
@@ -23,16 +23,16 @@
                 Another drop zone
             </div>
         </div>    
-    </div>
+    </div> -->
     <div class="row">        
         <div class="col">
             Multiple
-            <input type="file" ng2FileSelect [uploader]="uploader" multiple  />
+            <input type="file" ng2FileSelect [uploader]="uploader" multiple (onFileSelected)="onFileSelected($event)"  />
         </div>
-        <div class="col">    
+        <!-- <div class="col">    
             Single
             <input type="file" [uploader]="uploader" ng2FileSelect (onFileSelected)="onFileSelected($event)" />
-        </div>
+        </div> -->
     </div>
     <h5 class="mt-2">Upload queue - Queue length: {{ uploader?.queue?.length }}</h5>
     <div class="row">

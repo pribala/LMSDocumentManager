@@ -31,19 +31,10 @@ export class CustomModalComponent implements OnInit {
   docTypeNames: string[] = [];
   docTypes: any;
   selectedTemplate: any;
-  selectedTemplateId: any;
+  selectedTemplateId: string;
 
   @ViewChild('docForm') docForm: NgForm; 
   public availableDocState = [];
-
-  // selectedTemplateName: string;
-  // selectedDocumentType: string;
-  // selectedDocSource: string;
-  // selectedDocClass: string;
-  // selectedProperties: any;
-  // selectedMetaTags: any;  
-  // docTitle: string;
-  // docDescription: string;
   fileArray: File[];
   documentTemplate: SelectedTemplate = {
     selectedTemplateName: '',
@@ -65,6 +56,7 @@ export class CustomModalComponent implements OnInit {
   }
 
   openModal(modal){
+    this.resetDocumentTemplate();
     this.modalService.open(modal, {
       windowClass: 'modal',
       size: 'lg',
@@ -72,6 +64,7 @@ export class CustomModalComponent implements OnInit {
    }
 
    loadData(selectedTemplate: string) {   
+ 
     // get templates
     this.fileSettingService.getTemplates().subscribe((data: any) => {
       this.templates = data;
@@ -98,7 +91,21 @@ export class CustomModalComponent implements OnInit {
       }
       
     });
-  }   
+  }  
+  
+  resetDocumentTemplate() {
+    this.documentTemplate = {
+      selectedTemplateName: '',
+      selectedDocumentType: '',
+      selectedDocSource: '',
+      selectedDocClass: '',
+      docTitle: '',
+      docDescription: '',
+      selectedProperties: [],
+      selectedMetaTags: []
+    };
+  
+  }
 
   templateNameSelected(event) {
     this.loadData(event);  
@@ -109,7 +116,6 @@ export class CustomModalComponent implements OnInit {
 
     // get the Properties for the selectedDoctype
     this.documentTemplate.selectedProperties = selectedDocType.property;
-    console.log(selectedDocType.property)
 
     // get the MetaTags for the selectedDoctype
     this.documentTemplate.selectedMetaTags = selectedDocType.metatags.map(x => x);
@@ -159,10 +165,8 @@ export class CustomModalComponent implements OnInit {
       });    
    
     });
-    
-
-     docForm.form.reset();
-     this.modalService.dismissAll();
+    docForm.form.reset();
+    this.modalService.dismissAll();
   }
 
   close(modal) {

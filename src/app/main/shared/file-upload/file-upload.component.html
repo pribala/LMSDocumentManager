@@ -1,7 +1,7 @@
 
 <div class="container">
       
-    <h4>Select files</h4>
+    <label>Select files</label>
     <div class="row">
         <div class="col">
             <div ng2FileDrop
@@ -16,12 +16,12 @@
 
     <div class="row">        
         <div class="col">
-            Multiple
+            <label class="mr-1">Multiple</label>
             <input type="file" ng2FileSelect [uploader]="uploader" multiple (onFileSelected)="onFileSelected($event)"  />
         </div>
 
     </div>
-    <h5 class="mt-2">Upload queue - Queue length: {{ uploader?.queue?.length }}</h5>
+    <label class="mt-2">Upload queue - Queue length: {{ uploader?.queue?.length }}</label>
     <div class="row">
          <div class="col" style="margin-bottom: 20px">
              <table class="table">

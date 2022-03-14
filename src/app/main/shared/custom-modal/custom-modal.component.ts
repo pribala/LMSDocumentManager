@@ -4,7 +4,21 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FileSearchService } from 'app/main/pages/services/file-search.service';
 import { FileSettingService } from 'app/main/pages/services/file-setting.service';
 import { NgForm } from '@angular/forms';
+export interface SelectedTemplate {
+  selectedTemplateName: string;
+  selectedDocumentType: string;
+  selectedDocSource: string;
+  selectedDocClass: string;
+  docTitle: string;
+  docDescription: string;
+  selectedProperties: SelectedProperty[];
+  selectedMetaTags: string[];
+}
 
+export interface SelectedProperty {
+  name: string;
+  value: string;
+}
 @Component({
   selector: 'app-custom-modal',
   templateUrl: './custom-modal.component.html',
@@ -18,19 +32,29 @@ export class CustomModalComponent implements OnInit {
   docTypes: any;
   selectedTemplate: any;
   selectedTemplateId: any;
-  docTitle: string;
-  docDescription: string;
+
   @ViewChild('docForm') docForm: NgForm; 
   public availableDocState = [];
 
-  selectedTemplateName: string;
-  selectedDocumentType: string;
-  selectedDocSource: string;
-  selectedDocClass: string;
-  selectedProperties: any;
-  selectedMetaTags: any;
-
+  // selectedTemplateName: string;
+  // selectedDocumentType: string;
+  // selectedDocSource: string;
+  // selectedDocClass: string;
+  // selectedProperties: any;
+  // selectedMetaTags: any;  
+  // docTitle: string;
+  // docDescription: string;
   fileArray: File[];
+  documentTemplate: SelectedTemplate = {
+    selectedTemplateName: '',
+    selectedDocumentType: '',
+    selectedDocSource: '',
+    selectedDocClass: '',
+    docTitle: '',
+    docDescription: '',
+    selectedProperties: [],
+    selectedMetaTags: []
+  };
 
   constructor(private modalService: NgbModal, private fileSettingService: FileSettingService, private fileSearchService: FileSearchService,
     private toastr: ToastrService) { }
@@ -67,10 +91,10 @@ export class CustomModalComponent implements OnInit {
         this.availableDocState = this.selectedTemplate.docState.filter(x => x.isActive === 'true');
         
         // populate document source
-        this.selectedDocSource = this.selectedTemplate.docSource.filter(x => x.isActive === 'true').map(x => x.name);
+        this.documentTemplate.selectedDocSource = this.selectedTemplate.docSource.filter(x => x.isActive === 'true').map(x => x.name);
 
         // populate document class
-        this.selectedDocClass = this.selectedTemplate.docClass.name;
+        this.documentTemplate.selectedDocClass = this.selectedTemplate.docClass.name;
       }
       
     });
@@ -84,13 +108,14 @@ export class CustomModalComponent implements OnInit {
     let selectedDocType = this.docTypes.find(x => x.name === event);
 
     // get the Properties for the selectedDoctype
-    this.selectedProperties = selectedDocType.property;
+    this.documentTemplate.selectedProperties = selectedDocType.property;
+    console.log(selectedDocType.property)
 
     // get the MetaTags for the selectedDoctype
-    this.selectedMetaTags = selectedDocType.metatags.map(x => x);
+    this.documentTemplate.selectedMetaTags = selectedDocType.metatags.map(x => x);
 
     // create variables for each dynamic field
-    this.selectedProperties.forEach(field => {
+    this.documentTemplate.selectedProperties.forEach(field => {
       
     });
   }
@@ -105,26 +130,26 @@ export class CustomModalComponent implements OnInit {
     this.fileArray = this.fileSearchService.getFiles();
    
     // docClass
-    formData.append('docClass', this.selectedDocClass);
+    formData.append('docClass', this.documentTemplate.selectedDocClass);
 
     // Tags
-    if (this.selectedMetaTags && this.selectedMetaTags.length > 0) {
-      this.selectedMetaTags.forEach(tag => {
+    if (this.documentTemplate.selectedMetaTags && this.documentTemplate.selectedMetaTags.length > 0) {
+      this.documentTemplate.selectedMetaTags.forEach(tag => {
         formData.append('Tags', tag);
       });
     }
     // custom fields
-    if (this.selectedProperties && this.selectedProperties.length > 0) {
-      this.selectedProperties.forEach((property, index) => {
+    if (this.documentTemplate.selectedProperties && this.documentTemplate.selectedProperties.length > 0) {
+      this.documentTemplate.selectedProperties.forEach((property, index) => {
         formData.append(property.name, form.controls['title' + index].value);
       });    
     }
 
     // Title
-    formData.append('Title', this.docTitle);
+    formData.append('Title', this.documentTemplate.docTitle);
 
     // Description
-    formData.append('Description', this.docDescription);
+    formData.append('Description', this.documentTemplate.docDescription);
     this.fileArray.forEach(file => {
       formData.set('File', file);
       this.fileSearchService.uploadFile(formData).subscribe((data) => {

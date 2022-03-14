@@ -54,6 +54,7 @@ export class FileUploadComponent implements OnInit {
      };      
   }
 
+  // add file from drop area to file list
   public fileOverBase(e:any):void {
     this.hasBaseDropZoneOver = e;
     this.onFileSelected(e);
@@ -63,13 +64,18 @@ export class FileUploadComponent implements OnInit {
     this.hasAnotherDropZoneOver = e;
   }
 
+  // add selected files to list for upload
   public onFileSelected(event: EventEmitter<File[]>) {
     const file = [...this.uploader.queue];
     file.forEach(item => {
       this.fileService.addFileToList(item._file);
     });
+  }
 
-  
+  // remove a file from the list of files to be uploaded
+  removeFile(item) {
+    this.fileService.removeFile(this.uploader.queue.find(x => x._file.name == item._file.name)._file);
+    this.uploader.queue.splice(this.uploader.queue.findIndex(x => x._file == item._file), 1);
   }
 
 }

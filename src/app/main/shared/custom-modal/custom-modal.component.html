@@ -23,7 +23,7 @@
                 [addTag]="true"
                 bindLabel="name"
                 placeholder="Select template"
-                [(ngModel)]="selectedTemplateName"
+                [(ngModel)]="documentTemplate.selectedTemplateName"
                 name="selectedTemplateName"
                 (change)="templateNameSelected($event)"
               >
@@ -34,7 +34,7 @@
               </ng-select>
             </div>   
 
-            <ng-container *ngIf="selectedTemplateName">
+            <ng-container *ngIf="documentTemplate.selectedTemplateName">
               <div class="child">
                 <!-- Document Type -->
                 <label>Document Type</label>
@@ -44,7 +44,7 @@
                     [addTag]="true"
                     bindLabel="name"
                     placeholder="Select tag"
-                    [(ngModel)]="selectedDocumentType"
+                    [(ngModel)]="documentTemplate.selectedDocumentType"
                     name="selectedDocumentType"
                     (change)="docTypeSelected($event)"
                     >
@@ -71,18 +71,18 @@
 
                 <!-- Document Source -->
                 <div class="form-group">
-                    <label>Document Source: {{this.selectedDocSource}}</label>
+                    <label>Document Source: {{documentTemplate.selectedDocSource}}</label>
                 </div>
 
                 <!-- Document Class -->
                 <div class="form-group">
-                    <label>Document Class: {{this.selectedDocClass}}</label>
+                    <label>Document Class: {{documentTemplate.selectedDocClass}}</label>
                 </div>
 
                 <!-- Property from Document Type -->
                 <!-- <div class="form-group"> -->
                     <div class="flex-row d-flex align-items-end flex-wrap">
-                      <ng-container *ngFor="let item of selectedProperties | keyvalue; let m = index">
+                      <ng-container *ngFor="let item of documentTemplate.selectedProperties | keyvalue; let m = index">
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                 <label for="title{{ m }}">{{item.value.name}}</label>
@@ -101,21 +101,21 @@
                     </div>
                 <!-- </div> -->
 
-                <div class="form-group" *ngIf="selectedMetaTags">
-                    <label>Meta Tags: {{this.selectedMetaTags}}</label>
+                <div class="form-group" *ngIf="documentTemplate.selectedMetaTags">
+                    <label>Meta Tags: {{documentTemplate.selectedMetaTags}}</label>
                 </div>
          
 
                 <!-- File Title -->
                 <label>Document Title</label>
                 <div class="form-group">                
-                  <input type="text" class="form-control" name="docTitle" [(ngModel)]="docTitle"/>
+                  <input type="text" class="form-control" name="docTitle" [(ngModel)]="documentTemplate.docTitle"/>
                 </div>
 
                 <!-- File Description -->
                 <label>Document Description</label>
                 <div class="form-group">                
-                  <input type="text" class="form-control" name="docDescription" [(ngModel)]="docDescription"/>
+                  <input type="text" class="form-control" name="docDescription" [(ngModel)]="documentTemplate.docDescription"/>
                 </div>
 
                 <!-- File Upload component -->

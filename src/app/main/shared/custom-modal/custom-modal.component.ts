@@ -4,6 +4,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FileSearchService } from 'app/main/pages/services/file-search.service';
 import { FileSettingService } from 'app/main/pages/services/file-setting.service';
 import { NgForm } from '@angular/forms';
+
+// interface for selected template
 export interface SelectedTemplate {
   selectedTemplateName: string;
   selectedDocumentType: string;
@@ -15,6 +17,7 @@ export interface SelectedTemplate {
   selectedMetaTags: string[];
 }
 
+// selected property interface
 export interface SelectedProperty {
   name: string;
   value: string;
@@ -55,6 +58,7 @@ export class CustomModalComponent implements OnInit {
     
   }
 
+  // open upload modal
   openModal(modal){
     this.resetDocumentTemplate();
     this.modalService.open(modal, {
@@ -63,6 +67,7 @@ export class CustomModalComponent implements OnInit {
     });
    }
 
+   // get available template details
    loadData(selectedTemplate: string) {   
  
     // get templates
@@ -93,6 +98,7 @@ export class CustomModalComponent implements OnInit {
     });
   }  
   
+  // reset form
   resetDocumentTemplate() {
     this.documentTemplate = {
       selectedTemplateName: '',
@@ -107,10 +113,12 @@ export class CustomModalComponent implements OnInit {
   
   }
 
+  // re load data for selected template
   templateNameSelected(event) {
     this.loadData(event);  
   }
 
+  // populate document properties upon selection of doc type
   docTypeSelected(event: any) {
     let selectedDocType = this.docTypes.find(x => x.name === event);
 
@@ -126,6 +134,7 @@ export class CustomModalComponent implements OnInit {
     });
   }
 
+  // upload selected files
   uploadFile(docForm) {
     
     // setup the modal to send to API
@@ -169,6 +178,7 @@ export class CustomModalComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
+  // close modal
   close(modal) {
     modal.dismiss('Cross click');
 

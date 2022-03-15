@@ -87,14 +87,10 @@
                             <div class="col-md-6 col-12">
                                 <div class="form-group">
                                 <label for="title{{ m }}">{{item.value.name}}</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    name="title{{ m }}"
-                                    id="title{{ m }}"
-                                    placeholder="{{item.value.name}}"
-                                    [(ngModel)]="item.value.value"
-                                />
+                                <ng-container [ngSwitch]="item.value.value">
+                                  <input *ngSwitchCase="'date'" type="date" class="form-control" id="title{{ m }}" name="title{{ m }}" placeholder="Enter {{item.value.value}} Here" [(ngModel)]="item.value.data" />
+                                  <input *ngSwitchCase="'string'" type="text" class="form-control" id="title{{ m }}" name="title{{ m }}" placeholder="Enter {{item.value.value}} Here" [(ngModel)]="item.value.data"/>
+                              </ng-container>
                                 </div>
                             </div>  
 

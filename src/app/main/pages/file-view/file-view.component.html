@@ -155,7 +155,7 @@
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column name="Actions" [width]="120" [sortable]="false">
-        <ng-template ngx-datatable-cell-template>
+        <ng-template ngx-datatable-cell-template let-row="row">
           <div class="d-flex align-items-center">
             <div ngbDropdown container="body">
               <a
@@ -170,10 +170,10 @@
                 <i data-feather="more-vertical" class="text-primary cursor-pointer mr-50"></i>
               </a>
               <div ngbDropdownMenu class="dropdown-menu-right" aria-labelledby="dropdownBrowserState">
-                <a href="javascript:void(0)" ngbDropdownItem class="d-flex align-items-center"
+                <a href="javascript:void(0)"  (click)="viewFile(row.id, row.name)" ngbDropdownItem class="d-flex align-items-center"
                   ><i data-feather="file-text" class="mr-50"></i> View</a
                 >
-                <a href="javascript:void(0)" ngbDropdownItem class="d-flex align-items-center"
+                <a href="javascript:void(0)" (click)="downloadFile(row.id, row.name)" ngbDropdownItem class="d-flex align-items-center"
                   ><i data-feather="download" class="mr-50"></i> Download</a
                 >
                 <a href="javascript:void(0)" ngbDropdownItem class="d-flex align-items-center"

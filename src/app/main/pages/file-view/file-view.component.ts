@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { FileSearchService } from './../services/file-search.service';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 
@@ -15,6 +16,7 @@ import { locale as portuguese } from 'app/main/tables/datatables/i18n/pt';
 import * as snippet from 'app/main/tables/datatables/datatables.snippetcode';
 
 import { DatatablesService } from 'app/main/tables/datatables/datatables.service';
+import saveAs from 'file-saver';
 @Component({
   selector: 'app-file-view',
   templateUrl: './file-view.component.html',
@@ -180,7 +182,8 @@ export class FileViewComponent implements OnInit {
     */
    constructor(private _datatablesService: DatatablesService
       , private _coreTranslationService: CoreTranslationService
-      , private fileSearchService: FileSearchService) {
+      , private fileSearchService: FileSearchService
+      , private toastr: ToastrService) {
      this._unsubscribeAll = new Subject();
      this._coreTranslationService.translate(english, french, german, portuguese);
    }
@@ -238,7 +241,8 @@ export class FileViewComponent implements OnInit {
             size: item.size,
             addedBy: item.addedBy,
             addedDate: new Date(item.addedDate).toString() !== 'Invalid Date' ? new Date(item.addedDate).toLocaleDateString("en-US") : '',
-            tags: item.tags
+            tags: item.tags,
+            id: item.id
           }
         });
         this.tempData = this.rows;
@@ -249,4 +253,21 @@ export class FileViewComponent implements OnInit {
 
     });
    }
+
+   downloadFile(id, fileName) {
+     this.fileSearchService.donwloadFile(id).subscribe((data : any) => {
+       saveAs(data, fileName);
+     }, err => {
+      this.toastr.error('Error occured ' + err);
+     });
+   }
+
+   viewFile(id, fileName) {
+    this.fileSearchService.donwloadFile(id).subscribe((data) => {
+     console.log(data);
+     this.fileSearchService.GetFile(data, fileName)
+    }, err => {
+      this.toastr.error('Error occured ' + err);
+    });
+  }   
 }
